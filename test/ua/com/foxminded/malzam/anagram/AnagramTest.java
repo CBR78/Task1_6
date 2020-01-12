@@ -30,16 +30,6 @@ class AnagramTest {
     }
 
     @Test
-    public void reverseText_Expect_TwoSymbols_IfInput_TwoSymbols() {
-        assertEquals("#$", anagram.reverseText("#$"));
-    }
-
-    @Test
-    public void reverseText_Expect_TwoNumbers_IfInput_TwoNumbers() {
-        assertEquals("56", anagram.reverseText("56"));
-    }
-
-    @Test
     public void reverseText_Expect_ReversedTwoLettersInUpperCase_IfInput_TwoLettersInUpperCase() {
         assertEquals("BA", anagram.reverseText("AB"));
     }
@@ -62,16 +52,6 @@ class AnagramTest {
     @Test
     public void reverseText_Expect_ReversedThreeLettersInDifferentCase_IfInput_ThreeLettersInDifferentCase() {
         assertEquals("Cba", anagram.reverseText("abC"));
-    }
-
-    @Test
-    public void reverseText_Expect_ReversedThreeLettersInUpperCase_IfInput_ThreeLettersInUpperCase() {
-        assertEquals("CBA", anagram.reverseText("ABC"));
-    }
-
-    @Test
-    public void reverseText_Expect_ReversedThreeLettersInLowerCase_IfInput_ThreeLettersInLowerCase() {
-        assertEquals("cba", anagram.reverseText("abc"));
     }
 
     @Test

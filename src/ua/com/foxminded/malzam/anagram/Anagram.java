@@ -15,24 +15,17 @@ public class Anagram {
     private String reverseLetters(String word) {
         char[] reversedWord = word.toCharArray();
         for (int i = 0, j = word.length() - 1; i < j;) {
-            boolean iIsLetter = Character.isLetter(word.charAt(i));
-            boolean jIsLetter = Character.isLetter(word.charAt(j));
-            if (iIsLetter == true && jIsLetter == true) {
+            if (Character.isLetter(word.charAt(i)) && Character.isLetter(word.charAt(j))) {
                 reversedWord[i] = word.charAt(j);
                 reversedWord[j] = word.charAt(i);
                 i++;
                 j--;
             } else {
-                if (iIsLetter == false && jIsLetter == false) {
+                if (!Character.isLetter(word.charAt(i))) {
                     i++;
+                }
+                if (!Character.isLetter(word.charAt(j))) {
                     j--;
-                } else {
-                    if (iIsLetter) {
-                        j--;
-                    }
-                    if (jIsLetter) {
-                        i++;
-                    }
                 }
             }
         }
