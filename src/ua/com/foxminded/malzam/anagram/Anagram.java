@@ -19,24 +19,24 @@ public class Anagram {
     }
 
     private String reverseLetters(String word) {
-        char[] endChar = word.toCharArray();
+        char[] reversedWord = word.toCharArray();
         for (int i = 0, j = word.length() - 1; i < j;) {
-            char startCharI = word.charAt(i);
-            char startCharJ = word.charAt(j);
-            if (Character.isLetter(startCharI) && Character.isLetter(startCharJ)) {
-                endChar[i] = startCharJ;
-                endChar[j] = startCharI;
+            char startChar = word.charAt(i);
+            char endChar = word.charAt(j);
+            if (Character.isLetter(startChar) && Character.isLetter(endChar)) {
+                reversedWord[i] = endChar;
+                reversedWord[j] = startChar;
                 i++;
                 j--;
             } else {
-                if (!Character.isLetter(startCharI)) {
+                if (!Character.isLetter(startChar)) {
                     i++;
                 }
-                if (!Character.isLetter(startCharJ)) {
+                if (!Character.isLetter(endChar)) {
                     j--;
                 }
             }
         }
-        return new String(endChar);
+        return new String(reversedWord);
     }
 }
