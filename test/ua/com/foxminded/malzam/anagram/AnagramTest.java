@@ -10,13 +10,13 @@ class AnagramTest {
     Anagram anagram = new Anagram();
 
     @Test
-    public void reverseText_Expect_ThrowNullPointerException_IfInput_Null() {
-        assertThrows(NullPointerException.class, () -> anagram.reverseText(null));
+    public void reverseText_Expect_IllegalArgumentException_IfInput_Null() {
+        assertThrows(IllegalArgumentException.class, () -> anagram.reverseText(null));
     }
 
     @Test
-    public void reverseText_Expect_EmptyString_IfInput_Empty() {
-        assertEquals("", anagram.reverseText(""));
+    public void reverseText_Expect_IllegalArgumentException_IfInput_Empty() {
+        assertThrows(IllegalArgumentException.class, () -> anagram.reverseText(""));
     }
 
     @Test
