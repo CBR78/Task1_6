@@ -8,7 +8,7 @@ public class Anagram {
         if (text == null) {
             throw new IllegalArgumentException("text is illegal argument null");
         }
-        if (text.length() == 0) {
+        if ("".equals(text)) {
             throw new IllegalArgumentException("text is empty");
         }
         StringJoiner joiner = new StringJoiner(" ");
