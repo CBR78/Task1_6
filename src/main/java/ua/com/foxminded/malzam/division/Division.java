@@ -3,81 +3,74 @@ package ua.com.foxminded.malzam.division;
 public class Division {
 
     public String integerDivision(int dividend, int divider) {
-
-        // первая строка
-        StringBuilder result = new StringBuilder();
-        result = result.append("_" + dividend + "|" + divider);
-
-        // расчет неполного делимого
         String dividendString = String.valueOf(dividend);
-        String incompleteDividendString = new String();
+        int dividendLength = dividendString.length();
+        StringBuilder joiner = new StringBuilder();
         int remainder = 0;
-        int dividendLength = String.valueOf(dividend).length();
-        int j = 1;
-        for (int i = 0; i <= dividendLength - 1;) {
-            int incompleteDividend = 0;
+        int endNumber = 1;
+        for (int startNumber = 0; startNumber <= dividendLength - 1; startNumber = endNumber - 1) {
+            int incDividend = 0;
             String remainderString = String.valueOf(remainder);
-            // неполное делимое
-            for (; divider >= incompleteDividend; j++) {
-                incompleteDividendString = remainderString + dividendString.substring(i, j);
-                incompleteDividend = Integer.parseInt(incompleteDividendString);
+            for (; divider >= incDividend; endNumber++) {
+                String incDividendString = remainderString + dividendString.substring(startNumber, endNumber);
+                incDividend = Integer.parseInt(incDividendString);
             }
-            
-            boolean markFirstIteration;
-            if (i > 0) {
-                markFirstIteration = true; 
+            boolean firstIteration = startNumber == 0;
+            if (firstIteration) {
+                joiner = joiner.append("_" + dividend + "|" + divider); // first string - dividend | divider
             } else {
-                markFirstIteration = false;
+                String initSpace = "\n" + elements(" ", startNumber - 1) + "_";
+                joiner = joiner.append(initSpace + incDividend); // incDividend
             }
-            
-            StringBuilder spase = multiElements(" ", i - 1);
-            StringBuilder piped = new StringBuilder("");
-            StringBuilder quotientMark = new StringBuilder("");
-            StringBuilder multiplierMark = new StringBuilder("");
-            if (markFirstIteration) {
-                result = result.append("\n" + spase + "_" + incompleteDividend); // неполное делимое
-            } else {
-                int incompleteDividendLength = String.valueOf(incompleteDividend).length();
-                piped = multiElements(" ", dividendLength - incompleteDividendLength).append("|");
-                quotientMark = multiElements("-", dividendLength - incompleteDividendLength + 1);
-                multiplierMark = multiElements("x", dividendLength - incompleteDividendLength + 1);
-            }
-            i = j - 1;
 
-            // неполное частное
-            int incompleteQuotient = 0;
-            int k = 0;
-            for (; incompleteDividend >= incompleteQuotient; k++) {
-                incompleteQuotient = divider * k;
-            }
-            int incompleteMultiplier = k - 2;
-            incompleteQuotient = divider * incompleteMultiplier;
-            result = result.append("\n " + spase + incompleteQuotient + piped + quotientMark); // неполное частное
+            int incQuotient = divider * maxMultiplierIncDividend(incDividend, divider);
+            String initSpace = "\n" + elements(" ", startNumber);
+            joiner = joiner.append(initSpace + incQuotient); // incQuotient
 
-            // маркеры под неполным частным
-            int incompleteQuotientLength = String.valueOf(incompleteQuotient).length();
-            result = result.append("\n " + spase + multiElements("-", incompleteQuotientLength) + piped + multiplierMark);
-            
-            // вставка неполного частного в поле для полного частного
-            int indexForInsert = result.indexOf("x");
-            //result.insert(indexForInsert, incompleteMultiplier);
-            char incompleteMultiplierChar[] = String.valueOf(incompleteMultiplier).toCharArray();
-            result.setCharAt(indexForInsert, incompleteMultiplierChar[0]);
-            
-            // остаток деления
-            remainder = incompleteDividend - incompleteQuotient;
-            if (i > dividendLength - 1) {
-                result = result.append("\n  " + spase + remainder); // остаток деления
+            int incDividendLength = String.valueOf(incDividend).length();
+            String piped = elements(" ", dividendLength - incDividendLength + 1) + ("|");
+            int sumMarkersQuotient = dividendLength - incDividendLength + 1;
+            String markersQuotient = elements("-", sumMarkersQuotient);
+            if (firstIteration) {
+                joiner = joiner.append(piped + markersQuotient); // "|" + markersQuotient ("-")
+            }
+
+            int incQuotientLength = String.valueOf(incQuotient).length();
+            initSpace = "\n" + elements(" ", startNumber);
+            String markersUnderIncQuotient = elements("-", incQuotientLength);
+            joiner = joiner.append(initSpace + markersUnderIncQuotient); // markersUnderIncQuotient
+
+            if (firstIteration) {
+                markersQuotient = elements(".", sumMarkersQuotient);
+                joiner = joiner.append(piped + markersQuotient); // markers for replacement with digitQuotient
+            }
+            int indexForSet = joiner.indexOf(".");
+            char[] digitQuotient = String.valueOf(maxMultiplierIncDividend(incDividend, divider)).toCharArray();
+            joiner.setCharAt(indexForSet, digitQuotient[0]); // replacing markers with digitQuotient
+
+            remainder = incDividend - incQuotient;
+            boolean lastIteration = startNumber == dividendLength - 1;
+            if (lastIteration) {
+                initSpace = "\n" + elements(" ", startNumber + 1);
+                joiner = joiner.append(initSpace + remainder); // add remainder
             }
         }
-        return result.append("\n ").toString();
+        return joiner.append("\n ").toString();
     }
 
-    public StringBuilder multiElements(String element, int sum) {
-        StringBuilder multiElements = new StringBuilder();
-        for (int l = 0; l < sum; l++) {
-            multiElements.append(element);
+    private int maxMultiplierIncDividend(int incDividend, int divider) {
+        int multiplier = 0;
+        for (int incQuotient = 0; incDividend >= incQuotient; multiplier++) {
+            incQuotient = divider * multiplier;
         }
-        return multiElements;
+        return multiplier - 2;
+    }
+
+    private String elements(String element, int sum) {
+        StringBuilder elements = new StringBuilder();
+        for (int i = 0; i < sum; i++) {
+            elements.append(element);
+        }
+        return elements.toString();
     }
 }
