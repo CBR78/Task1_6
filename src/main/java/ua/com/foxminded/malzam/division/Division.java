@@ -15,48 +15,74 @@ public class Division {
                 String incDividendString = remainderString + dividendString.substring(startNumber, endNumber);
                 incDividend = Integer.parseInt(incDividendString);
             }
-            String initSpace;
-            boolean firstIteration = startNumber == 0;
-            if (firstIteration) {
-                joiner = joiner.append("_" + dividend + "|" + divider); // first string - dividend | divider
-            } else {
-                initSpace = "\n" + elements(" ", startNumber - 1) + "_";
-                joiner = joiner.append(initSpace + incDividend); // incDividend
-            }
-
             int incQuotient = divider * maxMultiplierIncDividend(incDividend, divider);
-            initSpace = "\n" + elements(" ", startNumber);
-            joiner = joiner.append(initSpace + incQuotient); // incQuotient
+            remainder = incDividend - incQuotient;
 
+            boolean firstIteration = startNumber == 0;
+            boolean lastIteration = startNumber == dividendLength - 1;
             int incDividendLength = String.valueOf(incDividend).length();
             String piped = elements(" ", dividendLength - incDividendLength + 1) + ("|");
             int sumMarkersQuotient = dividendLength - incDividendLength + 1;
-            String markersQuotient = elements("-", sumMarkersQuotient);
-            if (firstIteration) {
-                joiner = joiner.append(piped + markersQuotient); // "|" + markersQuotient ("-")
-            }
-
-            int incQuotientLength = String.valueOf(incQuotient).length();
-            initSpace = "\n" + elements(" ", startNumber);
-            String markersUnderIncQuotient = elements("-", incQuotientLength);
-            joiner = joiner.append(initSpace + markersUnderIncQuotient); // markersUnderIncQuotient
 
             if (firstIteration) {
-                markersQuotient = elements(".", sumMarkersQuotient);
-                joiner = joiner.append(piped + markersQuotient); // markers for replacement with digitQuotient
+                joiner.append("_" + dividend + "|" + divider);
+            } else {
+                joinIncDividend(joiner, incDividend, startNumber);
             }
-            int indexForSet = joiner.indexOf(".");
-            char[] digitQuotient = String.valueOf(maxMultiplierIncDividend(incDividend, divider)).toCharArray();
-            joiner.setCharAt(indexForSet, digitQuotient[0]); // replacing markers with digitQuotient
-
-            remainder = incDividend - incQuotient;
-            boolean lastIteration = startNumber == dividendLength - 1;
+            joinIncQuotient(joiner, incQuotient, startNumber);
+            if (firstIteration) {
+                joinMarkersQuotient(joiner, piped, sumMarkersQuotient);
+            }
+            joinMarkersUnderIncQuotient(joiner, incQuotient, startNumber);
+            if (firstIteration) {
+                joinMarkersForReplacementWithDigitQuotient(joiner, piped, sumMarkersQuotient);
+            }
+            replacingMarkersWithDigitQuotient(joiner, incDividend, divider);
             if (lastIteration) {
-                initSpace = "\n" + elements(" ", startNumber + 1);
-                joiner = joiner.append(initSpace + remainder); // add remainder
+                joinRemainder(joiner, remainder, startNumber);
             }
         }
-        return joiner.append("\n ").toString();
+        return joiner.toString();
+    }
+
+    private StringBuilder joinIncDividend(StringBuilder joiner, int incDividend, int startNumber) {
+        String initSpace = "\n" + elements(" ", startNumber - 1) + "_";
+        return joiner.append(initSpace + incDividend);
+    }
+
+    private StringBuilder joinIncQuotient(StringBuilder joiner, int incQuotient, int startNumber) {
+        String initSpace = "\n" + elements(" ", startNumber);
+        return joiner.append(initSpace + incQuotient);
+    }
+
+    private StringBuilder joinMarkersQuotient(StringBuilder joiner, String piped, int sumMarkersQuotient) {
+        String markersQuotient = elements("-", sumMarkersQuotient);
+        return joiner.append(piped + markersQuotient);
+    }
+
+    private StringBuilder joinMarkersUnderIncQuotient(StringBuilder joiner, int incQuotient, int startNumber) {
+        int incQuotientLength = String.valueOf(incQuotient).length();
+        String initSpace = "\n" + elements(" ", startNumber);
+        String markersUnderIncQuotient = elements("-", incQuotientLength);
+        return joiner.append(initSpace + markersUnderIncQuotient);
+    }
+
+    private StringBuilder joinMarkersForReplacementWithDigitQuotient(StringBuilder joiner, String piped,
+            int sumMarkersQuotient) {
+        String markersQuotient = elements(".", sumMarkersQuotient);
+        return joiner.append(piped + markersQuotient);
+    }
+
+    private StringBuilder replacingMarkersWithDigitQuotient(StringBuilder joiner, int incDividend, int divider) {
+        int indexForSet = joiner.indexOf(".");
+        char[] digitQuotient = String.valueOf(maxMultiplierIncDividend(incDividend, divider)).toCharArray();
+        joiner.setCharAt(indexForSet, digitQuotient[0]);
+        return joiner;
+    }
+
+    private StringBuilder joinRemainder(StringBuilder joiner, int remainder, int startNumber) {
+        String initSpace = "\n" + elements(" ", startNumber + 1);
+        return joiner.append(initSpace + remainder).append("\n ");
     }
 
     private int maxMultiplierIncDividend(int incDividend, int divider) {
