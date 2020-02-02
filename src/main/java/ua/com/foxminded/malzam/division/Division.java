@@ -15,16 +15,17 @@ public class Division {
                 String incDividendString = remainderString + dividendString.substring(startNumber, endNumber);
                 incDividend = Integer.parseInt(incDividendString);
             }
+            String initSpace;
             boolean firstIteration = startNumber == 0;
             if (firstIteration) {
                 joiner = joiner.append("_" + dividend + "|" + divider); // first string - dividend | divider
             } else {
-                String initSpace = "\n" + elements(" ", startNumber - 1) + "_";
+                initSpace = "\n" + elements(" ", startNumber - 1) + "_";
                 joiner = joiner.append(initSpace + incDividend); // incDividend
             }
 
             int incQuotient = divider * maxMultiplierIncDividend(incDividend, divider);
-            String initSpace = "\n" + elements(" ", startNumber);
+            initSpace = "\n" + elements(" ", startNumber);
             joiner = joiner.append(initSpace + incQuotient); // incQuotient
 
             int incDividendLength = String.valueOf(incDividend).length();
