@@ -21,7 +21,7 @@ public class Division {
             boolean lastIteration = startNumber == dividendLength - 1;
             int incQuotient = incDividend - remainder;
             int incDividendLength = String.valueOf(incDividend).length();
-            String piped = elements(" ", dividendLength - incDividendLength + 1) + ("|");
+            String spaseAndPiped = elements(" ", dividendLength - incDividendLength + 1) + ("|");
             int sumMarkersQuotient = dividendLength - incDividendLength + 1;
 
             if (firstIteration) {
@@ -31,11 +31,11 @@ public class Division {
             }
             joinIncQuotient(joiner, incQuotient, startNumber);
             if (firstIteration) {
-                joinMarkersQuotient(joiner, piped, sumMarkersQuotient);
+                joinMarkersQuotient(joiner, spaseAndPiped, sumMarkersQuotient);
             }
             joinMarkersUnderIncQuotient(joiner, incQuotient, startNumber);
             if (firstIteration) {
-                joinMarkersForReplacementWithDigitQuotient(joiner, piped, sumMarkersQuotient);
+                joinMarkersForReplacementWithDigitQuotient(joiner, spaseAndPiped, sumMarkersQuotient);
             }
             replacingMarkersWithDigitQuotient(joiner, incDividend, divider);
             if (lastIteration) {
