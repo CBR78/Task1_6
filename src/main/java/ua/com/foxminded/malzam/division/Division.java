@@ -9,49 +9,51 @@ public class Division {
         int remainder = 0;
         int endNumber = 1;
         for (int startNumber = 0; startNumber <= dividendLength - 1; startNumber = endNumber - 1) {
+            boolean firstIteration = startNumber == 0;
+            boolean lastIteration = startNumber == dividendLength - 1;
             int incDividend = 0;
             String remainderString = String.valueOf(remainder);
-            for (; divider >= incDividend; endNumber++) {
+            for (; incDividend < divider; endNumber++) {
                 String incDividendString = remainderString + dividendString.substring(startNumber, endNumber);
                 incDividend = Integer.parseInt(incDividendString);
             }
             remainder = incDividend % divider;
             
-            boolean firstIteration = startNumber == 0;
-            boolean lastIteration = startNumber == dividendLength - 1;
             int incQuotient = incDividend - remainder;
+            int sumSpaceDefault = endNumber - String.valueOf(incQuotient).length();
+            int sumSpaceRemainder = endNumber - String.valueOf(remainder).length();
             int incDividendLength = String.valueOf(incDividend).length();
-            String spaseAndPiped = elements(" ", dividendLength - incDividendLength + 1) + ("|");
+            String spaseAndPiped = elements(" ", dividendLength - incDividendLength) + ("|");
             int sumMarkersQuotient = dividendLength - incDividendLength + 1;
 
             if (firstIteration) {
                 joiner.append("_" + dividend + "|" + divider);
             } else {
-                joinIncDividend(joiner, incDividend, startNumber);
+                joinIncDividend(joiner, incDividend, sumSpaceDefault);
             }
-            joinIncQuotient(joiner, incQuotient, startNumber);
+            joinIncQuotient(joiner, incQuotient, sumSpaceDefault);
             if (firstIteration) {
                 joinMarkersQuotient(joiner, spaseAndPiped, sumMarkersQuotient);
             }
-            joinMarkersUnderIncQuotient(joiner, incQuotient, startNumber);
+            joinMarkersUnderIncQuotient(joiner, incQuotient, sumSpaceDefault);
             if (firstIteration) {
                 joinMarkersForReplacementWithDigitQuotient(joiner, spaseAndPiped, sumMarkersQuotient);
             }
             replacingMarkersWithDigitQuotient(joiner, incDividend, divider);
             if (lastIteration) {
-                joinRemainder(joiner, remainder, startNumber);
+                joinRemainder(joiner, remainder, sumSpaceRemainder);
             }
         }
         return joiner.toString();
     }
 
-    private StringBuilder joinIncDividend(StringBuilder joiner, int incDividend, int startNumber) {
-        String initSpace = "\n" + elements(" ", startNumber - 1) + "_";
+    private StringBuilder joinIncDividend(StringBuilder joiner, int incDividend, int sumSpaceDefault) {
+        String initSpace = "\n" + elements(" ", sumSpaceDefault - 1) + "_";
         return joiner.append(initSpace + incDividend);
     }
 
-    private StringBuilder joinIncQuotient(StringBuilder joiner, int incQuotient, int startNumber) {
-        String initSpace = "\n" + elements(" ", startNumber);
+    private StringBuilder joinIncQuotient(StringBuilder joiner, int incQuotient, int sumSpaceDefault) {
+        String initSpace = "\n" + elements(" ", sumSpaceDefault);
         return joiner.append(initSpace + incQuotient);
     }
 
@@ -60,9 +62,9 @@ public class Division {
         return joiner.append(piped + markersQuotient);
     }
 
-    private StringBuilder joinMarkersUnderIncQuotient(StringBuilder joiner, int incQuotient, int startNumber) {
+    private StringBuilder joinMarkersUnderIncQuotient(StringBuilder joiner, int incQuotient, int sumSpaceDefault) {
         int incQuotientLength = String.valueOf(incQuotient).length();
-        String initSpace = "\n" + elements(" ", startNumber);
+        String initSpace = "\n" + elements(" ", sumSpaceDefault);
         String markersUnderIncQuotient = elements("-", incQuotientLength);
         return joiner.append(initSpace + markersUnderIncQuotient);
     }
@@ -81,8 +83,8 @@ public class Division {
         return joiner;
     }
 
-    private StringBuilder joinRemainder(StringBuilder joiner, int remainder, int startNumber) {
-        String initSpace = "\n" + elements(" ", startNumber + 1);
+    private StringBuilder joinRemainder(StringBuilder joiner, int remainder, int sumSpaceRemainder) {
+        String initSpace = "\n" + elements(" ", sumSpaceRemainder);
         return joiner.append(initSpace + remainder).append("\n ");
     }
 
