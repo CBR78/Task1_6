@@ -16,11 +16,10 @@ public class Division {
                 incDividend = Integer.parseInt(incDividendString);
             }
             remainder = incDividend % divider;
-            int maxMultiplierIncDividend = (incDividend - remainder) / divider;
-            int incQuotient = divider * maxMultiplierIncDividend;
-
+            
             boolean firstIteration = startNumber == 0;
             boolean lastIteration = startNumber == dividendLength - 1;
+            int incQuotient = incDividend - remainder;
             int incDividendLength = String.valueOf(incDividend).length();
             String piped = elements(" ", dividendLength - incDividendLength + 1) + ("|");
             int sumMarkersQuotient = dividendLength - incDividendLength + 1;
@@ -38,7 +37,7 @@ public class Division {
             if (firstIteration) {
                 joinMarkersForReplacementWithDigitQuotient(joiner, piped, sumMarkersQuotient);
             }
-            replacingMarkersWithDigitQuotient(joiner, maxMultiplierIncDividend);
+            replacingMarkersWithDigitQuotient(joiner, incDividend, divider);
             if (lastIteration) {
                 joinRemainder(joiner, remainder, startNumber);
             }
@@ -74,8 +73,9 @@ public class Division {
         return joiner.append(piped + markersQuotient);
     }
 
-    private StringBuilder replacingMarkersWithDigitQuotient(StringBuilder joiner, int maxMultiplierIncDividend) {
+    private StringBuilder replacingMarkersWithDigitQuotient(StringBuilder joiner, int incDividend, int divider) {
         int indexForSet = joiner.indexOf(".");
+        int maxMultiplierIncDividend = incDividend / divider;
         char[] digitQuotient = String.valueOf(maxMultiplierIncDividend).toCharArray();
         joiner.setCharAt(indexForSet, digitQuotient[0]);
         return joiner;
