@@ -15,8 +15,9 @@ public class Division {
                 String incDividendString = remainderString + dividendString.substring(startNumber, endNumber);
                 incDividend = Integer.parseInt(incDividendString);
             }
-            int incQuotient = divider * maxMultiplierIncDividend(incDividend, divider);
-            remainder = incDividend - incQuotient;
+            remainder = incDividend % divider;
+            int maxMultiplierIncDividend = (incDividend - remainder) / divider;
+            int incQuotient = divider * maxMultiplierIncDividend;
 
             boolean firstIteration = startNumber == 0;
             boolean lastIteration = startNumber == dividendLength - 1;
@@ -37,7 +38,7 @@ public class Division {
             if (firstIteration) {
                 joinMarkersForReplacementWithDigitQuotient(joiner, piped, sumMarkersQuotient);
             }
-            replacingMarkersWithDigitQuotient(joiner, incDividend, divider);
+            replacingMarkersWithDigitQuotient(joiner, maxMultiplierIncDividend);
             if (lastIteration) {
                 joinRemainder(joiner, remainder, startNumber);
             }
@@ -73,9 +74,9 @@ public class Division {
         return joiner.append(piped + markersQuotient);
     }
 
-    private StringBuilder replacingMarkersWithDigitQuotient(StringBuilder joiner, int incDividend, int divider) {
+    private StringBuilder replacingMarkersWithDigitQuotient(StringBuilder joiner, int maxMultiplierIncDividend) {
         int indexForSet = joiner.indexOf(".");
-        char[] digitQuotient = String.valueOf(maxMultiplierIncDividend(incDividend, divider)).toCharArray();
+        char[] digitQuotient = String.valueOf(maxMultiplierIncDividend).toCharArray();
         joiner.setCharAt(indexForSet, digitQuotient[0]);
         return joiner;
     }
@@ -83,14 +84,6 @@ public class Division {
     private StringBuilder joinRemainder(StringBuilder joiner, int remainder, int startNumber) {
         String initSpace = "\n" + elements(" ", startNumber + 1);
         return joiner.append(initSpace + remainder).append("\n ");
-    }
-
-    private int maxMultiplierIncDividend(int incDividend, int divider) {
-        int multiplier = 0;
-        for (int incQuotient = 0; incDividend >= incQuotient; multiplier++) {
-            incQuotient = divider * multiplier;
-        }
-        return multiplier - 2;
     }
 
     private String elements(String element, int sum) {
