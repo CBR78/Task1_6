@@ -5,7 +5,9 @@ public class Division {
     public String makeDivision(int dividend, int divider) {
         int absDividend = Math.abs(dividend);
         int absDivider = Math.abs(divider);
-        checkIllegalArgumentExceptions(absDividend, absDivider);
+        
+        checkIllegalArgument(absDividend, absDivider);
+        
         String absDividendString = String.valueOf(absDividend);
         int absDividendLength = absDividendString.length();
         StringBuilder builder = new StringBuilder();
@@ -16,22 +18,20 @@ public class Division {
             int incDividend = 0;
             String remainderString = String.valueOf(remainder);
 
-            for (; incDividend < absDivider; endNumber++) {
+            while (incDividend < absDivider) {
                 String incDividendString = remainderString + absDividendString.substring(startNumber, endNumber);
                 incDividend = Integer.parseInt(incDividendString);
+                endNumber++;
             }
 
-            boolean firstIteration = startNumber == 0;
-            boolean lastIteration = endNumber == absDividendLength + 1;
             remainder = incDividend % absDivider;
             int incQuotient = incDividend - remainder;
             int sumSpaceDefault = endNumber - String.valueOf(incQuotient).length();
-            int sumSpaceRemainder = endNumber - String.valueOf(remainder).length();
             int incDividendLength = String.valueOf(incDividend).length();
             String spaseAndPiped = makeChainElements(" ", absDividendLength - incDividendLength) + ("|");
             int sumMarkersQuotient = absDividendLength - incDividendLength + 1;
 
-            if (firstIteration) {
+            if (startNumber == 0) {
                 builder.append("_" + absDividend + "|" + absDivider);
                 joinIncQuotient(builder, incQuotient, sumSpaceDefault);
                 joinMarkersQuotient(builder, spaseAndPiped, sumMarkersQuotient);
@@ -44,14 +44,13 @@ public class Division {
                 joinMarkersUnderIncQuotient(builder, incQuotient, sumSpaceDefault);
                 replaceMarkersWithDigitQuotient(builder, incDividend, absDivider);
             }
-            if (lastIteration) {
-                joinRemainder(builder, remainder, sumSpaceRemainder);
-            }
         }
+        int sumSpaceRemainder = endNumber - String.valueOf(remainder).length();
+        joinRemainder(builder, remainder, sumSpaceRemainder);
         return builder.toString();
     }
     
-    private void checkIllegalArgumentExceptions(int absDividend, int absDivider) {
+    private void checkIllegalArgument(int absDividend, int absDivider) {
         if (absDividend == 0) {
             throw new IllegalArgumentException("Dividend cannot be 0, \"0/" + absDivider + "=0\"");
         }
