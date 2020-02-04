@@ -5,16 +5,7 @@ public class Division {
     public String makeDivision(int dividend, int divider) {
         int absDividend = Math.abs(dividend);
         int absDivider = Math.abs(divider);
-        if (absDividend == 0) {
-            throw new IllegalArgumentException("Dividend cannot be 0, \"0/" + absDivider + "=0\"");
-        }
-        if (absDivider == 0) {
-            throw new IllegalArgumentException("Divider cannot be 0, division by zero");
-        }
-        if (absDividend < absDivider) {
-            throw new IllegalArgumentException(
-                    "Dividend cannot be less than the Divisor, \"" + absDividend + "\\" + absDivider + "=0\"");
-        }
+        checkIllegalArgumentExceptions(absDividend, absDivider);
         String absDividendString = String.valueOf(absDividend);
         int absDividendLength = absDividendString.length();
         StringBuilder builder = new StringBuilder();
@@ -58,6 +49,19 @@ public class Division {
             }
         }
         return builder.toString();
+    }
+    
+    private void checkIllegalArgumentExceptions(int absDividend, int absDivider) {
+        if (absDividend == 0) {
+            throw new IllegalArgumentException("Dividend cannot be 0, \"0/" + absDivider + "=0\"");
+        }
+        if (absDivider == 0) {
+            throw new IllegalArgumentException("Divider cannot be 0, division by zero");
+        }
+        if (absDividend < absDivider) {
+            throw new IllegalArgumentException(
+                    "Dividend cannot be less than the Divisor, \"" + absDividend + "\\" + absDivider + "=0\"");
+        }
     }
 
     private StringBuilder joinIncDividend(StringBuilder builder, int incDividend, int sumSpaceDefault) {
