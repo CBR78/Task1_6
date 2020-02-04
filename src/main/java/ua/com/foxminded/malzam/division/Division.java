@@ -26,27 +26,26 @@ public class Division {
 
             remainder = incDividend % absDivider;
             int incQuotient = incDividend - remainder;
-            int sumSpaceDefault = endNumber - String.valueOf(incQuotient).length();
+            int sumSpace = endNumber - String.valueOf(incQuotient).length();
             int incDividendLength = String.valueOf(incDividend).length();
             String spaseAndPiped = makeChainElements(" ", absDividendLength - incDividendLength) + ("|");
             int sumMarkersQuotient = absDividendLength - incDividendLength + 1;
 
             if (startNumber == 0) {
                 builder.append("_" + absDividend + "|" + absDivider);
-                joinIncQuotient(builder, incQuotient, sumSpaceDefault);
+                joinIncQuotient(builder, incQuotient, sumSpace);
                 joinMarkersQuotient(builder, spaseAndPiped, sumMarkersQuotient);
-                joinMarkersUnderIncQuotient(builder, incQuotient, sumSpaceDefault);
+                joinMarkersUnderIncQuotient(builder, incQuotient, sumSpace);
                 joinMarkersForReplacementWithDigitQuotient(builder, spaseAndPiped, sumMarkersQuotient);
                 replaceMarkersWithDigitQuotient(builder, incDividend, absDivider);
             } else {
-                joinIncDividend(builder, incDividend, sumSpaceDefault);
-                joinIncQuotient(builder, incQuotient, sumSpaceDefault);
-                joinMarkersUnderIncQuotient(builder, incQuotient, sumSpaceDefault);
+                joinIncDividend(builder, incDividend, sumSpace);
+                joinIncQuotient(builder, incQuotient, sumSpace);
+                joinMarkersUnderIncQuotient(builder, incQuotient, sumSpace);
                 replaceMarkersWithDigitQuotient(builder, incDividend, absDivider);
             }
         }
-        int sumSpaceRemainder = endNumber - String.valueOf(remainder).length();
-        joinRemainder(builder, remainder, sumSpaceRemainder);
+        joinRemainder(builder, remainder, endNumber);
         return builder.toString();
     }
     
@@ -63,13 +62,13 @@ public class Division {
         }
     }
 
-    private StringBuilder joinIncDividend(StringBuilder builder, int incDividend, int sumSpaceDefault) {
-        String initSpace = "\n" + makeChainElements(" ", sumSpaceDefault - 1) + "_";
+    private StringBuilder joinIncDividend(StringBuilder builder, int incDividend, int sumSpace) {
+        String initSpace = "\n" + makeChainElements(" ", sumSpace - 1) + "_";
         return builder.append(initSpace + incDividend);
     }
 
-    private StringBuilder joinIncQuotient(StringBuilder builder, int incQuotient, int sumSpaceDefault) {
-        String initSpace = "\n" + makeChainElements(" ", sumSpaceDefault);
+    private StringBuilder joinIncQuotient(StringBuilder builder, int incQuotient, int sumSpace) {
+        String initSpace = "\n" + makeChainElements(" ", sumSpace);
         return builder.append(initSpace + incQuotient);
     }
 
@@ -78,9 +77,9 @@ public class Division {
         return builder.append(piped + markersQuotient);
     }
 
-    private StringBuilder joinMarkersUnderIncQuotient(StringBuilder builder, int incQuotient, int sumSpaceDefault) {
+    private StringBuilder joinMarkersUnderIncQuotient(StringBuilder builder, int incQuotient, int sumSpace) {
         int incQuotientLength = String.valueOf(incQuotient).length();
-        String initSpace = "\n" + makeChainElements(" ", sumSpaceDefault);
+        String initSpace = "\n" + makeChainElements(" ", sumSpace);
         String markersUnderIncQuotient = makeChainElements("-", incQuotientLength);
         return builder.append(initSpace + markersUnderIncQuotient);
     }
@@ -99,8 +98,9 @@ public class Division {
         return builder;
     }
 
-    private StringBuilder joinRemainder(StringBuilder builder, int remainder, int sumSpaceRemainder) {
-        String initSpace = "\n" + makeChainElements(" ", sumSpaceRemainder);
+    private StringBuilder joinRemainder(StringBuilder builder, int remainder, int endNumber) {
+        int sumSpace = endNumber - String.valueOf(remainder).length();
+        String initSpace = "\n" + makeChainElements(" ", sumSpace);
         return builder.append(initSpace + remainder);
     }
 
