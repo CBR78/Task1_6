@@ -6,7 +6,7 @@ public class Division {
         int absDividend = Math.abs(dividend);
         int absDivider = Math.abs(divider);
         
-        checkIllegalArgument(absDividend, absDivider);
+        validate(absDividend, absDivider);
         
         String absDividendString = String.valueOf(absDividend);
         int absDividendLength = absDividendString.length();
@@ -49,7 +49,7 @@ public class Division {
         return builder.toString();
     }
     
-    private void checkIllegalArgument(int absDividend, int absDivider) {
+    private void validate(int absDividend, int absDivider) {
         if (absDividend == 0) {
             throw new IllegalArgumentException("Dividend cannot be 0, \"0/" + absDivider + "=0\"");
         }
