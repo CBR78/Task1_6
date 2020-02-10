@@ -39,7 +39,6 @@ public class CharCounter {
 
     private Map<Character, Integer> calculateChars(String text) {
         Map<Character, Integer> charCounter = new LinkedHashMap<>();
-
         for (int i = 0; i < text.length(); i++) {
             Character charText = text.charAt(i);
 
@@ -55,10 +54,7 @@ public class CharCounter {
 
     private String buildResponse(String text, Map<Character, Integer> charCounter) {
         StringBuilder builder = new StringBuilder(text);
-
-        for (Map.Entry<Character, Integer> charEntry : charCounter.entrySet()) {
-            builder = builder.append("\n\"" + charEntry.getKey() + "\" - " + charEntry.getValue());
-        }
+        charCounter.forEach((k,v) -> builder.append("\n\"" + k + "\" - " + v));        
         return builder.toString();
     }
 
