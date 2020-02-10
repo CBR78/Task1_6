@@ -4,8 +4,8 @@ public class Runner {
 
     public static void main(String[] args) {
         String example = "hello world!";
-        CountChars countChars = new CountChars();
-        System.out.println(countChars.makeCountChars(example));
+        CharStatistics charStatistics = new CharStatistics();
+        System.out.println(charStatistics.getCharStatistics(example));
     }
 
 }
