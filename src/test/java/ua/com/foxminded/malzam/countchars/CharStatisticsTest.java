@@ -1,25 +1,27 @@
-package ua.com.foxminded.malzam.count.chars;
+package ua.com.foxminded.malzam.countchars;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import ua.com.foxminded.malzam.countchars.CharCounter;
+
 class CharStatisticsTest {
 
-    CharStatistics charStatistics = new CharStatistics();
+    CharCounter charCounter = new CharCounter();
 
     @Test
-    public void charStatistics_Expect_IllegalArgumentException_IfText_IsNull() {
-        assertThrows(IllegalArgumentException.class, () -> charStatistics.getCharStatistics(null));
+    public void charCounter_Expect_IllegalArgumentException_IfText_IsNull() {
+        assertThrows(IllegalArgumentException.class, () -> charCounter.countChars(null));
     }
 
     @Test
-    public void charStatistics_Expect_IllegalArgumentException_IfText_IsEmpty() {
-        assertThrows(IllegalArgumentException.class, () -> charStatistics.getCharStatistics(""));
+    public void charCounter_Expect_IllegalArgumentException_IfText_IsEmpty() {
+        assertThrows(IllegalArgumentException.class, () -> charCounter.countChars(""));
     }
 
     @Test
-    public void charStatistics_Expect_IfText_IsHelloWorld() {
+    public void charCounter_Expect_IfText_IsHelloWorld() {
         assertEquals("hello world!\n"
                    + "\"h\" - 1\n"
                    + "\"e\" - 1\n" 
@@ -29,11 +31,11 @@ class CharStatisticsTest {
                    + "\"w\" - 1\n" 
                    + "\"r\" - 1\n" 
                    + "\"d\" - 1\n" 
-                   + "\"!\" - 1", charStatistics.getCharStatistics("hello world!"));
+                   + "\"!\" - 1", charCounter.countChars("hello world!"));
     }
 
     @Test
-    public void charStatistics_Expect_IfText_IsHelloWorldAndDigit() {
+    public void charCounter_Expect_IfText_IsHelloWorldAndDigit() {
         assertEquals("he8826llo worl87d!\n" 
                    + "\"h\" - 1\n" 
                    + "\"e\" - 1\n" 
@@ -47,7 +49,7 @@ class CharStatisticsTest {
                    + "\"r\" - 1\n" 
                    + "\"7\" - 1\n" 
                    + "\"d\" - 1\n" 
-                   + "\"!\" - 1", charStatistics.getCharStatistics("he8826llo worl87d!"));
+                   + "\"!\" - 1", charCounter.countChars("he8826llo worl87d!"));
     }
     
 }
