@@ -57,5 +57,4 @@ public class CharCounter {
         charCounter.forEach((k,v) -> builder.append("\n\"" + k + "\" - " + v));        
         return builder.toString();
     }
-
 }

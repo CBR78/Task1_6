@@ -7,5 +7,4 @@ public class Runner {
         CharCounter charCounter = new CharCounter();
         System.out.println(charCounter.countChars(example));
     }
-
 }
