@@ -24,6 +24,10 @@ public class CharCounter {
         return response;
     }
 
+    public Map<String, String> getTextCache() {
+        return textCache;
+    }
+    
     private void validate(String text) {
         if (text == null) {
             throw new IllegalArgumentException("text is illegal argument null");
@@ -56,10 +60,6 @@ public class CharCounter {
             builder = builder.append("\n\"" + charEntry.getKey() + "\" - " + charEntry.getValue());
         }
         return builder.toString();
-    }
-
-    public Map<String, String> getTextCache() {
-        return textCache;
     }
 
 }
