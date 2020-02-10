@@ -7,12 +7,12 @@ import java.util.Map;
 public class CharStatistics {
 
     public String getCharStatistics(String text) {
-        
+
         validate(text);
-        
+
         Map<String, String> queryHistory = new HashMap<>();
         String response;
-        
+
         if (queryHistory.containsKey(text)) {
             response = queryHistory.get(text);
         } else {
@@ -22,7 +22,7 @@ public class CharStatistics {
         }
         return response;
     }
-    
+
     private void validate(String text) {
         if (text == null) {
             throw new IllegalArgumentException("text is illegal argument null");
@@ -32,18 +32,9 @@ public class CharStatistics {
         }
     }
 
-    private String buildResponse(String text, Map<Character, Integer> charStatistics) {
-        StringBuilder builder = new StringBuilder(text);
-        
-        for (Map.Entry<Character, Integer> charEntry : charStatistics.entrySet()) {
-            builder = builder.append("\n\"" + charEntry.getKey() + "\" - " + charEntry.getValue());
-        }
-        return builder.toString();
-    }
-
     private Map<Character, Integer> calculateCharStatistics(String text) {
         Map<Character, Integer> charStatistics = new LinkedHashMap<>();
-        
+
         for (int i = 0; i < text.length(); i++) {
             Character charText = text.charAt(i);
 
@@ -55,5 +46,14 @@ public class CharStatistics {
             }
         }
         return charStatistics;
+    }
+
+    private String buildResponse(String text, Map<Character, Integer> charStatistics) {
+        StringBuilder builder = new StringBuilder(text);
+
+        for (Map.Entry<Character, Integer> charEntry : charStatistics.entrySet()) {
+            builder = builder.append("\n\"" + charEntry.getKey() + "\" - " + charEntry.getValue());
+        }
+        return builder.toString();
     }
 }
