@@ -5,12 +5,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CharCounter {
+    
+    Map<String, String> textCache = new HashMap<>();
 
     public String countChars(String text) {
 
         validate(text);
 
-        Map<String, String> textCache = new HashMap<>();
         String response;
 
         if (textCache.containsKey(text)) {
