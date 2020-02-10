@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CharCounter {
-    
+
     Map<String, String> textCache = new HashMap<>();
 
     public String countChars(String text) {

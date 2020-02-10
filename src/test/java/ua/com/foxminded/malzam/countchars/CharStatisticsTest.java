@@ -52,4 +52,16 @@ class CharStatisticsTest {
                    + "\"!\" - 1", charCounter.countChars("he8826llo worl87d!"));
     }
     
+    @Test
+    public void cachedResponse_Expect_IfText_IsTestCache() {
+        charCounter.countChars("test cache");
+        assertEquals("test cache\n" 
+                   + "\"t\" - 2\n" 
+                   + "\"e\" - 2\n" 
+                   + "\"s\" - 1\n" 
+                   + "\" \" - 1\n" 
+                   + "\"c\" - 2\n" 
+                   + "\"a\" - 1\n" 
+                   + "\"h\" - 1", charCounter.textCache.get("test cache"));
+    }
 }
