@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class CharCounter {
 
-    Map<String, String> textCache = new HashMap<>();
+    private Map<String, String> textCache = new HashMap<>();
 
     public String countChars(String text) {
 
@@ -57,4 +57,9 @@ public class CharCounter {
         }
         return builder.toString();
     }
+
+    public Map<String, String> getTextCache() {
+        return textCache;
+    }
+
 }

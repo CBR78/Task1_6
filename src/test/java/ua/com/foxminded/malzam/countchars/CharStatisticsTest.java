@@ -1,10 +1,9 @@
 package ua.com.foxminded.malzam.countchars;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
-
-import ua.com.foxminded.malzam.countchars.CharCounter;
 
 class CharStatisticsTest {
 
@@ -62,6 +61,6 @@ class CharStatisticsTest {
                    + "\" \" - 1\n" 
                    + "\"c\" - 2\n" 
                    + "\"a\" - 1\n" 
-                   + "\"h\" - 1", charCounter.textCache.get("test cache"));
+                   + "\"h\" - 1", charCounter.getTextCache().get("test cache"));
     }
 }
