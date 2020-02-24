@@ -48,12 +48,12 @@ public class ReportFormulaOne {
 		return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond);
 	}
 
-	private int parseInt(String string, int i, int j) {
-		return Integer.parseInt(string.substring(i, j));
+	private int parseInt(String string, int startIndex, int endIndex) {
+		return Integer.parseInt(string.substring(startIndex, endIndex));
 	}
 
 	private SortedMap<Duration, String> countResults(Map<String, LocalDateTime> startMap,
-			Map<String, LocalDateTime> endMap) {
+                                                     Map<String, LocalDateTime> endMap) {
 		SortedMap<Duration, String> resultsMap = new TreeMap<>();
 
 		for (Map.Entry<String, LocalDateTime> mapEntry : startMap.entrySet()) {
@@ -79,7 +79,7 @@ public class ReportFormulaOne {
 			long second = timeLap.getSeconds() % 60;
 			long milli = timeLap.getNano() / 1000000;
 			builder.append(String.format("%2d. %-17s | %-25s | %d:%02d.%tL",
-					                     place, racer, team, minute, second, milli) + "\n");
+                                         place, racer, team, minute, second, milli) + "\n");
 			if (place == 15) {
 				builder.append(String.format("%n"));
 			}
