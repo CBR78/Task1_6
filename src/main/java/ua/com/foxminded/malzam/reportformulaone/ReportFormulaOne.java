@@ -22,9 +22,11 @@ public class ReportFormulaOne {
                 Stream<String> streamRacersAndTeams = Files.lines(Paths.get(pathAbbrFile))) {
 
             Map<String, LocalDateTime> startMap = streamStart
-                    .collect(Collectors.toMap(p -> p.substring(0, 3), p -> formatLDT(p.substring(3))));
+                    .collect(Collectors.toMap(p -> p.substring(0, 3),
+                                              p -> LocalDateTime.parse(p.substring(3).replace("_", "T"))));
             Map<String, LocalDateTime> endMap = streamEnd
-                    .collect(Collectors.toMap(p -> p.substring(0, 3), p -> formatLDT(p.substring(3))));
+                    .collect(Collectors.toMap(p -> p.substring(0, 3),
+                                              p -> LocalDateTime.parse(p.substring(3).replace("_", "T"))));
             SortedMap<Duration, String> results = countResults(startMap, endMap);
             Map<String, String[]> racersAndTeams = streamRacersAndTeams
                     .collect(Collectors.toMap(p -> p.substring(0, 3), p -> p.substring(4).split("_")));
@@ -33,23 +35,7 @@ public class ReportFormulaOne {
         } catch (IOException ex) {
 
         }
-
         return report;
-    }
-
-    private LocalDateTime formatLDT(String time) {
-        int year = parseInt(time, 0, 4);
-        int month = parseInt(time, 5, 7);
-        int dayOfMonth = parseInt(time, 8, 10);
-        int hour = parseInt(time, 11, 13);
-        int minute = parseInt(time, 14, 16);
-        int second = parseInt(time, 17, 19);
-        int nanoOfSecond = parseInt(time, 20, 23) * 1000000;
-        return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond);
-    }
-
-    private int parseInt(String string, int startIndex, int endIndex) {
-        return Integer.parseInt(string.substring(startIndex, endIndex));
     }
 
     private SortedMap<Duration, String> countResults(Map<String, LocalDateTime> startMap,
@@ -64,7 +50,7 @@ public class ReportFormulaOne {
         return resultsMap;
     }
 
-    private String buildReport(Map<Duration, String> results, Map<String, String[]> racersAndTeams) {
+    private String buildReport(SortedMap<Duration, String> results, Map<String, String[]> racersAndTeams) {
         int place = 0;
         StringBuilder builder = new StringBuilder();
 
@@ -78,7 +64,7 @@ public class ReportFormulaOne {
             long second = timeLap.getSeconds() % 60;
             long milli = timeLap.getNano() / 1000000;
             builder.append(String.format("%2d. %-17s | %-25s | %d:%02d.%tL",
-                                        place, racer, team, minute, second, milli) + "\n");
+                                         place, racer, team, minute, second, milli) + "\n");
             if (place == 15) {
                 builder.append(String.format("%n"));
             }
