@@ -1,6 +1,8 @@
 package ua.com.foxminded.malzam.report_racers.runner;
 
+import ua.com.foxminded.malzam.report_racers.model.Racer;
 import ua.com.foxminded.malzam.report_racers.service.RacerReader;
+import ua.com.foxminded.malzam.report_racers.service.RacerReporter;
 
 public class Runner {
 
@@ -10,22 +12,29 @@ public class Runner {
         String pathAbbrFile = "c:\\java\\files\\qualification1\\abbreviations.txt";
 
         RacerReader resultRacers = new RacerReader();
+        RacerReporter racerReporter = new RacerReporter();
         
-        String report = resultRacers.parseRacers(pathStartFile, pathEndFile, pathAbbrFile);
+        Racer racers = resultRacers.parseRacers(pathStartFile, pathEndFile, pathAbbrFile);
+        String report = racerReporter.buildReport(racers);
+        
         System.out.println(report);
         
         pathStartFile = "c:\\java\\files\\qualification2\\start.log";
         pathEndFile = "c:\\java\\files\\qualification2\\end.log";
         pathAbbrFile = "c:\\java\\files\\qualification2\\abbreviations.txt";
 
-        report = resultRacers.parseRacers(pathStartFile, pathEndFile, pathAbbrFile);
+        racers = resultRacers.parseRacers(pathStartFile, pathEndFile, pathAbbrFile);
+        report = racerReporter.buildReport(racers);
+        
         System.out.println(report);
         
         pathStartFile = "c:\\java\\files\\qualification3\\start.log";
         pathEndFile = "c:\\java\\files\\qualification3\\end.log";
         pathAbbrFile = "c:\\java\\files\\qualification3\\abbreviations.txt";
 
-        report = resultRacers.parseRacers(pathStartFile, pathEndFile, pathAbbrFile);
+        racers = resultRacers.parseRacers(pathStartFile, pathEndFile, pathAbbrFile);
+        report = racerReporter.buildReport(racers);
+        
         System.out.println(report);
     }
 
