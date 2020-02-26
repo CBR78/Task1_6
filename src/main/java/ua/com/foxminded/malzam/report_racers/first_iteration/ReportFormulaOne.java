@@ -1,4 +1,4 @@
-package ua.com.foxminded.malzam.reportformulaone;
+package ua.com.foxminded.malzam.report_racers.first_iteration;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,7 +19,7 @@ public class ReportFormulaOne {
 
         try (Stream<String> streamStart = Files.lines(Paths.get(pathStartFile));
                 Stream<String> streamEnd = Files.lines(Paths.get(pathEndFile));
-                Stream<String> streamRacersAndTeams = Files.lines(Paths.get(pathAbbrFile))) {
+                Stream<String> streamRacers = Files.lines(Paths.get(pathAbbrFile))) {
 
             Map<String, LocalDateTime> startMap = streamStart
                     .collect(Collectors.toMap(p -> p.substring(0, 3),
@@ -28,9 +28,9 @@ public class ReportFormulaOne {
                     .collect(Collectors.toMap(p -> p.substring(0, 3),
                                               p -> LocalDateTime.parse(p.substring(3).replace("_", "T"))));
             SortedMap<Duration, String> results = countResults(startMap, endMap);
-            Map<String, String[]> racersAndTeams = streamRacersAndTeams
+            Map<String, String[]> racers = streamRacers
                     .collect(Collectors.toMap(p -> p.substring(0, 3), p -> p.substring(4).split("_")));
-            report = buildReport(results, racersAndTeams);
+            report = buildReport(results, racers);
 
         } catch (IOException ex) {
 
@@ -50,7 +50,7 @@ public class ReportFormulaOne {
         return resultsMap;
     }
 
-    private String buildReport(SortedMap<Duration, String> results, Map<String, String[]> racersAndTeams) {
+    private String buildReport(SortedMap<Duration, String> results, Map<String, String[]> racers) {
         int place = 0;
         StringBuilder builder = new StringBuilder();
 
@@ -58,8 +58,8 @@ public class ReportFormulaOne {
             Duration timeLap = resultsMapEntry.getKey();
             String abbrKey = resultsMapEntry.getValue();
             place++;
-            String racer = racersAndTeams.get(abbrKey)[0];
-            String team = racersAndTeams.get(abbrKey)[1];
+            String racer = racers.get(abbrKey)[0];
+            String team = racers.get(abbrKey)[1];
             long minute = timeLap.toMinutes();
             long second = timeLap.getSeconds() % 60;
             long milli = timeLap.getNano() / 1000000;
