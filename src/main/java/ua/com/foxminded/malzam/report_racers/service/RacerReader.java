@@ -3,54 +3,54 @@ package ua.com.foxminded.malzam.report_racers.service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ua.com.foxminded.malzam.report_racers.model.Racer;
 
 public class RacerReader {
-    public Racer parseRacers(String pathStartFile, String pathEndFile, String pathAbbrFile) {
+    private int numQualification = 0;
+    private SortedSet<Racer> racers = new TreeSet<>((o1, o2) -> o1.getAbbr().compareTo(o2.getAbbr()));
 
-        Racer racers2 = new Racer();
-        
-        try (Stream<String> streamStart = Files.lines(Paths.get(pathStartFile));
-                Stream<String> streamEnd = Files.lines(Paths.get(pathEndFile));
-                Stream<String> streamRacers = Files.lines(Paths.get(pathAbbrFile))) {
-        //--------------------------------------
-            Map<String, String[]> racers = streamRacers
-                    .collect(Collectors.toMap(p -> p.substring(0, 3), p -> p.substring(4).split("_")));
-            
-            racers2.racers = racers;
-        //--------------------------------------    
-            Map<String, LocalDateTime> startMap = streamStart
-                    .collect(Collectors.toMap(p -> p.substring(0, 3),
-                                              p -> LocalDateTime.parse(p.substring(3).replace("_", "T"))));
-            Map<String, LocalDateTime> endMap = streamEnd
-                    .collect(Collectors.toMap(p -> p.substring(0, 3),
-                                              p -> LocalDateTime.parse(p.substring(3).replace("_", "T"))));
-            SortedMap<Duration, String> results = countResults(startMap, endMap);
-            racers2.results = results;
-          //--------------------------------------    
+    public Set<Racer> parseRacers(String pathStartFile, String pathEndFile, String pathAbbrFile) {
+        numQualification++;
+
+        try (Stream<String> streamRacers = Files.lines(Paths.get(pathAbbrFile));
+                Stream<String> streamStart = Files.lines(Paths.get(pathStartFile));
+                Stream<String> streamEnd = Files.lines(Paths.get(pathEndFile))) {
+
+            racers = streamRacers.map(Racer::new).collect(Collectors.toCollection(() -> racers));
+
+            Set<String> startResults = streamStart.collect(Collectors.toSet());
+            for (String startTime : startResults) {
+                String abbrResult = startTime.substring(0, 3);
+                for (Racer racer : racers) {
+                    String abbr = racer.getAbbr();
+                    if (abbr.equals(abbrResult)) {
+                        racer.setStartTime(numQualification, startTime);
+                        break;
+                    }
+                }
+            }
+
+            Set<String> endResults = streamEnd.collect(Collectors.toSet());
+            for (String endTime : endResults) {
+                String abbrResult = endTime.substring(0, 3);
+                for (Racer racer : racers) {
+                    String abbr = racer.getAbbr();
+                    if (abbr.equals(abbrResult)) {
+                        racer.setEndTime(numQualification, endTime);
+                        break;
+                    }
+                }
+            }
+
         } catch (IOException ex) {
 
         }
-        return racers2;
-    }
-
-    private SortedMap<Duration, String> countResults(Map<String, LocalDateTime> startMap,
-                                                     Map<String, LocalDateTime> endMap) {
-        SortedMap<Duration, String> resultsMap = new TreeMap<>();
-
-        for (Map.Entry<String, LocalDateTime> mapEntry : startMap.entrySet()) {
-            String abbrKey = mapEntry.getKey();
-            Duration duration = Duration.between(startMap.get(abbrKey), endMap.get(abbrKey));
-            resultsMap.put(duration, abbrKey);
-        }
-        return resultsMap;
+        return racers;
     }
 }

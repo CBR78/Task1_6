@@ -21,6 +21,8 @@ public class ReportFormulaOne {
                 Stream<String> streamEnd = Files.lines(Paths.get(pathEndFile));
                 Stream<String> streamRacers = Files.lines(Paths.get(pathAbbrFile))) {
 
+            Map<String, String[]> racers = streamRacers
+                    .collect(Collectors.toMap(p -> p.substring(0, 3), p -> p.substring(4).split("_")));
             Map<String, LocalDateTime> startMap = streamStart
                     .collect(Collectors.toMap(p -> p.substring(0, 3),
                                               p -> LocalDateTime.parse(p.substring(3).replace("_", "T"))));
@@ -28,8 +30,6 @@ public class ReportFormulaOne {
                     .collect(Collectors.toMap(p -> p.substring(0, 3),
                                               p -> LocalDateTime.parse(p.substring(3).replace("_", "T"))));
             SortedMap<Duration, String> results = countResults(startMap, endMap);
-            Map<String, String[]> racers = streamRacers
-                    .collect(Collectors.toMap(p -> p.substring(0, 3), p -> p.substring(4).split("_")));
             report = buildReport(results, racers);
 
         } catch (IOException ex) {
