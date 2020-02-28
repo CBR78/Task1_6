@@ -12,10 +12,10 @@ public class Racer {
     private SortedSet<LapTime> lapTimeSet;
     private LapTime tempLapTime;
 
-    public Racer(String abbr, String name, String team) {
-        this.abbr = abbr;
-        this.name = name;
-        this.team = team;
+    public Racer(String racerAbbr, String racerName, String racerTeam) {
+        abbr = racerAbbr;
+        name = racerName;
+        team = racerTeam;
         lapTimeSet = new TreeSet<>((o1, o2) -> o1.getDuration().compareTo(o2.getDuration()));
     }
 

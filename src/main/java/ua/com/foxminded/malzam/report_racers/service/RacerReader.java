@@ -16,12 +16,12 @@ public class RacerReader {
 
     public Set<Racer> parseFiles(String pathStartFile, String pathEndFile, String pathAbbrFile) {
 
-        try (Stream<String> streamRacers = Files.lines(Paths.get(pathAbbrFile));
+        try (Stream<String> streamRacersAbbr = Files.lines(Paths.get(pathAbbrFile));
                 Stream<String> streamStart = Files.lines(Paths.get(pathStartFile));
                 Stream<String> streamEnd = Files.lines(Paths.get(pathEndFile))) {
 
-            Set<String> racersString = streamRacers.collect(Collectors.toSet());
-            parseRacersString(racersString);
+            Set<String> racersAbbr = streamRacersAbbr.collect(Collectors.toSet());
+            parseRacersAbbr(racersAbbr);
             Set<String> startResults = streamStart.collect(Collectors.toSet());
             parseStartResults(startResults);
             Set<String> endResults = streamEnd.collect(Collectors.toSet());
@@ -33,13 +33,13 @@ public class RacerReader {
         return racers;
     }
 
-    private void parseRacersString(Set<String> racersString) {
-        for (String racerString : racersString) {
-            String abbr = racerString.substring(0, 3);
-            String[] array = racerString.substring(4).split("_");
-            String name = array[0];
-            String team = array[1];
-            Racer racer = new Racer(abbr, name, team);
+    private void parseRacersAbbr(Set<String> racersAbbr) {
+        for (String racerAbbrEntry : racersAbbr) {
+            String racerAbbr = racerAbbrEntry.substring(0, 3);
+            String[] array = racerAbbrEntry.substring(4).split("_");
+            String racerName = array[0];
+            String racerTeam = array[1];
+            Racer racer = new Racer(racerAbbr, racerName, racerTeam);
             racers.add(racer);
         }
     }
