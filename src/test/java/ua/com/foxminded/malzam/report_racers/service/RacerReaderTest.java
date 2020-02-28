@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 class RacerReaderTest {
 
-    String pathStartFile = "c:\\java\\files\\qualification1\\start.log";
-    String pathEndFile   = "c:\\java\\files\\qualification1\\end.log";
-    String pathAbbrFile  = "c:\\java\\files\\qualification1\\abbreviations.txt";
-    String notExistFile  = "c:\\";
+    String pathStartFile = "start.log";
+    String pathEndFile = "end.log";
+    String pathAbbrFile = "abbreviations.txt";
+    String notExistFile  = "abbreviations.log";
 
     RacerReader resultRacers = new RacerReader();
 

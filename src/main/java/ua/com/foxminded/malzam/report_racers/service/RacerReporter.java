@@ -1,6 +1,5 @@
 package ua.com.foxminded.malzam.report_racers.service;
 
-import java.time.Duration;
 import java.util.Set;
 
 import ua.com.foxminded.malzam.report_racers.model.Racer;
@@ -16,10 +15,10 @@ public class RacerReporter {
             place++;
             String name = racer.getName();
             String team = racer.getTeam();
-            Duration timeLap = racer.getBestLap();
-            long minute = timeLap.toMinutes();
-            long second = timeLap.getSeconds() % 60;
-            long milli = timeLap.getNano() / 1000000;
+            long timeLap = racer.getBestLap();
+            long minute = timeLap / (60 * 1000);
+            long second = timeLap % (60 * 1000) / 1000;
+            long milli  = timeLap % 1000;
             builder.append(String.format("%2d. %-17s | %-25s | %d:%02d.%tL",
                                          place, name, team, minute, second, milli) + "\n");
             if (place == DELIMITER_STRING) {
