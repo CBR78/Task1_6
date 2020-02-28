@@ -13,6 +13,7 @@ public class RacerReporter {
         final int DELIMITER_STRING = 15;
         int place = 0;
         StringBuilder builder = new StringBuilder();
+        
         SortedSet<Racer> sortedRacers = new TreeSet<>((o1, o2) -> o1.getBestLap().compareTo(o2.getBestLap()));
         sortedRacers.addAll(racers);
 
