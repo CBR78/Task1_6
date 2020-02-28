@@ -8,26 +8,24 @@ public class Racer {
     private String abbr;
     private String name;
     private String team;
-    private LapTime lapTimeTemp;
+    private LapTime tempLapTime;
     private SortedSet<LapTime> lapTimeSet;
     private Duration bestLap;
-    
-    public Racer(String string) {
-        abbr = string.substring(0, 3);
-        String[] array = string.substring(4).split("_");
-        name = array[0];
-        team = array[1];
+
+    public Racer(String abbr, String name, String team) {
+        this.abbr = abbr;
+        this.name = name;
+        this.team = team;
         lapTimeSet = new TreeSet<>((o1, o2) -> o1.getDuration().compareTo(o2.getDuration()));
     }
 
-    public void setStartTime(int numQualification, String string) {
-        lapTimeTemp = new LapTime();
-        lapTimeTemp.setStartTime(numQualification, string);
+    public void setStartTime(String startTime) {
+        tempLapTime = new LapTime(startTime);
     }
 
-    public void setEndTime(int numQualification, String string) {
-        lapTimeTemp.setEndTime(string);
-        lapTimeSet.add(lapTimeTemp);
+    public void setEndTime(String endTime) {
+        tempLapTime.setEndTime(endTime);
+        lapTimeSet.add(tempLapTime);
         bestLap = lapTimeSet.first().getDuration();
     }
 

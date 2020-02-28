@@ -16,7 +16,7 @@ public class Runner {
         RacerReader resultRacers = new RacerReader();
         RacerReporter racerReporter = new RacerReporter();
 
-        Set<Racer> racers = resultRacers.parseRacers(pathStartFile, pathEndFile, pathAbbrFile);
+        Set<Racer> racers = resultRacers.parseFiles(pathStartFile, pathEndFile, pathAbbrFile);
         String report = racerReporter.buildReport(racers);
         System.out.println(report);
 
@@ -24,7 +24,7 @@ public class Runner {
         pathEndFile = "c:\\java\\files\\qualification2\\end.log";
         pathAbbrFile = "c:\\java\\files\\qualification2\\abbreviations.txt";
 
-        racers = resultRacers.parseRacers(pathStartFile, pathEndFile, pathAbbrFile);
+        racers = resultRacers.parseFiles(pathStartFile, pathEndFile, pathAbbrFile);
         report = racerReporter.buildReport(racers);
         System.out.println(report);
 
@@ -32,9 +32,8 @@ public class Runner {
         pathEndFile = "c:\\java\\files\\qualification3\\end.log";
         pathAbbrFile = "c:\\java\\files\\qualification3\\abbreviations.txt";
 
-        racers = resultRacers.parseRacers(pathStartFile, pathEndFile, pathAbbrFile);
+        racers = resultRacers.parseFiles(pathStartFile, pathEndFile, pathAbbrFile);
         report = racerReporter.buildReport(racers);
         System.out.println(report);
     }
-
 }

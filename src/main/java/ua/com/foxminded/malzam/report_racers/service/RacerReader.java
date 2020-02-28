@@ -12,37 +12,52 @@ import java.util.stream.Stream;
 import ua.com.foxminded.malzam.report_racers.model.Racer;
 
 public class RacerReader {
-    private int numQualification = 0;
-    private SortedSet<Racer> racers = new TreeSet<>((o1, o2) -> o1.getAbbr().compareTo(o2.getAbbr()));
+    private SortedSet<Racer> racersSet = new TreeSet<>((o1, o2) -> o1.getAbbr().compareTo(o2.getAbbr()));
 
-    public Set<Racer> parseRacers(String pathStartFile, String pathEndFile, String pathAbbrFile) {
-        numQualification++;
+    public Set<Racer> parseFiles(String pathStartFile, String pathEndFile, String pathAbbrFile) {
 
         try (Stream<String> streamRacers = Files.lines(Paths.get(pathAbbrFile));
                 Stream<String> streamStart = Files.lines(Paths.get(pathStartFile));
                 Stream<String> streamEnd = Files.lines(Paths.get(pathEndFile))) {
 
-            racers = streamRacers.map(Racer::new).collect(Collectors.toCollection(() -> racers));
-
+            //racers = streamRacers.map(Racer::new).collect(Collectors.toCollection(() -> racers));
+            
+            Set<String> racersString = streamRacers.collect(Collectors.toSet());
+            
+            for (String racerString : racersString) {
+                String abbr = racerString.substring(0, 3);
+                String[] array = racerString.substring(4).split("_");
+                String name = array[0];
+                String team = array[1];
+                Racer racer = new Racer(abbr, name, team);
+                racersSet.add(racer);
+            }
+            
+            
+            
             Set<String> startResults = streamStart.collect(Collectors.toSet());
-            for (String startTime : startResults) {
-                String abbrResult = startTime.substring(0, 3);
-                for (Racer racer : racers) {
-                    String abbr = racer.getAbbr();
-                    if (abbr.equals(abbrResult)) {
-                        racer.setStartTime(numQualification, startTime);
+
+            for (Racer racer : racersSet) {
+                String abbrRacer = racer.getAbbr();
+
+                for (String startTime : startResults) {
+                    String abbrStart = startTime.substring(0, 3);
+                    if (abbrStart.equals(abbrRacer)) {
+                        racer.setStartTime(startTime);
                         break;
                     }
                 }
             }
 
             Set<String> endResults = streamEnd.collect(Collectors.toSet());
-            for (String endTime : endResults) {
-                String abbrResult = endTime.substring(0, 3);
-                for (Racer racer : racers) {
-                    String abbr = racer.getAbbr();
-                    if (abbr.equals(abbrResult)) {
-                        racer.setEndTime(numQualification, endTime);
+
+            for (Racer racer : racersSet) {
+                String abbrRacer = racer.getAbbr();
+
+                for (String endTime : endResults) {
+                    String abbrEnd = endTime.substring(0, 3);
+                    if (abbrEnd.equals(abbrRacer)) {
+                        racer.setEndTime(endTime);
                         break;
                     }
                 }
@@ -51,6 +66,6 @@ public class RacerReader {
         } catch (IOException ex) {
 
         }
-        return racers;
+        return racersSet;
     }
 }
