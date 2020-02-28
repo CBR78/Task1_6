@@ -16,18 +16,18 @@ class RacerReaderTest {
     @Test
     public void parseFiles_Expect_IllegalArgumentException_ifStartFile_isNotExist() {
         assertThrows(IllegalArgumentException.class,
-                () -> resultRacers.parseFiles(notExistFile, pathEndFile, pathAbbrFile));
+                () -> resultRacers.recieveRacers(notExistFile, pathEndFile, pathAbbrFile));
     }
 
     @Test
     public void parseFiles_Expect_IllegalArgumentException_ifEndFile_isNotExist() {
         assertThrows(IllegalArgumentException.class,
-                () -> resultRacers.parseFiles(pathStartFile, notExistFile, pathAbbrFile));
+                () -> resultRacers.recieveRacers(pathStartFile, notExistFile, pathAbbrFile));
     }
 
     @Test
     public void parseFiles_Expect_IllegalArgumentException_ifAbbrFile_isNotExist() {
         assertThrows(IllegalArgumentException.class,
-                () -> resultRacers.parseFiles(pathStartFile, pathEndFile, notExistFile));
+                () -> resultRacers.recieveRacers(pathStartFile, pathEndFile, notExistFile));
     }
 }

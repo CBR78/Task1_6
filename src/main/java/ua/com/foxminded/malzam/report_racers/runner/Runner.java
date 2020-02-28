@@ -9,31 +9,17 @@ import ua.com.foxminded.malzam.report_racers.service.RacerReporter;
 public class Runner {
 
     public static void main(String[] args) {
-        String pathStartFile = "c:\\java\\files\\qualification1\\start.log";
-        String pathEndFile = "c:\\java\\files\\qualification1\\end.log";
-        String pathAbbrFile = "c:\\java\\files\\qualification1\\abbreviations.txt";
-
+        
         RacerReader resultRacers = new RacerReader();
         RacerReporter racerReporter = new RacerReporter();
 
-        Set<Racer> racers = resultRacers.parseFiles(pathStartFile, pathEndFile, pathAbbrFile);
+        String pathStartFile = "start.log";
+        String pathEndFile = "end.log";
+        String pathAbbrFile = "abbreviations.txt";
+
+        Set<Racer> racers = resultRacers.recieveRacers(pathStartFile, pathEndFile, pathAbbrFile);
         String report = racerReporter.buildReport(racers);
         System.out.println(report);
-
-        pathStartFile = "c:\\java\\files\\qualification2\\start.log";
-        pathEndFile = "c:\\java\\files\\qualification2\\end.log";
-        pathAbbrFile = "c:\\java\\files\\qualification2\\abbreviations.txt";
-
-        racers = resultRacers.parseFiles(pathStartFile, pathEndFile, pathAbbrFile);
-        report = racerReporter.buildReport(racers);
-        System.out.println(report);
-
-        pathStartFile = "c:\\java\\files\\qualification3\\start.log";
-        pathEndFile = "c:\\java\\files\\qualification3\\end.log";
-        pathAbbrFile = "c:\\java\\files\\qualification3\\abbreviations.txt";
-
-        racers = resultRacers.parseFiles(pathStartFile, pathEndFile, pathAbbrFile);
-        report = racerReporter.buildReport(racers);
-        System.out.println(report);
-    }
-}
+        
+    
+}}

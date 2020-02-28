@@ -2,8 +2,6 @@ package ua.com.foxminded.malzam.report_racers.service;
 
 import java.time.Duration;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import ua.com.foxminded.malzam.report_racers.model.Racer;
 
@@ -14,10 +12,7 @@ public class RacerReporter {
         int place = 0;
         StringBuilder builder = new StringBuilder();
         
-        SortedSet<Racer> sortedRacers = new TreeSet<>((o1, o2) -> o1.getBestLap().compareTo(o2.getBestLap()));
-        sortedRacers.addAll(racers);
-
-        for (Racer racer : sortedRacers) {
+        for (Racer racer : racers) {
             place++;
             String name = racer.getName();
             String team = racer.getTeam();

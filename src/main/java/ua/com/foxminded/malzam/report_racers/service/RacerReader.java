@@ -1,76 +1,73 @@
 package ua.com.foxminded.malzam.report_racers.service;
 
-import java.io.IOException;
+import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
+import ua.com.foxminded.malzam.report_racers.model.LapTime;
 import ua.com.foxminded.malzam.report_racers.model.Racer;
 
 public class RacerReader {
-    private Set<Racer> racers = new HashSet<>();
 
-    public Set<Racer> parseFiles(String pathStartFile, String pathEndFile, String pathAbbrFile) {
+    public Set<Racer> recieveRacers(String pathStartFile, String pathEndFile, String pathAbbrFile) {
+        Set<Racer> racers = new TreeSet<>(Comparator.comparing(Racer::getBestLap));
 
-        try (Stream<String> streamRacersAbbr = Files.lines(Paths.get(pathAbbrFile));
-                Stream<String> streamStart = Files.lines(Paths.get(pathStartFile));
-                Stream<String> streamEnd = Files.lines(Paths.get(pathEndFile))) {
+        ClassLoader loader = getClass().getClassLoader();
+        URL resource = loader.getResource(pathAbbrFile);
 
-            Set<String> racersAbbr = streamRacersAbbr.collect(Collectors.toSet());
-            parseRacersAbbr(racersAbbr);
-            Set<String> startResults = streamStart.collect(Collectors.toSet());
-            parseStartResults(startResults);
-            Set<String> endResults = streamEnd.collect(Collectors.toSet());
-            parseEndResults(endResults);
-
-        } catch (IOException ex) {
+        try (Stream<String> streamRacersAbbr = Files
+                .lines(Paths.get(new File(resource.getFile()).getPath()))) {
+            streamRacersAbbr.forEach(line -> racers.add(new Racer(line.split("_")[0], line.split("_")[1],
+                    line.split("_")[2], readLapTimes(pathStartFile, pathEndFile, line.split("_")[0]))));
+        } catch (Exception ex) {
 
         }
+
         return racers;
     }
 
-    private void parseRacersAbbr(Set<String> racersAbbr) {
-        for (String racerAbbrEntry : racersAbbr) {
-            String racerAbbr = racerAbbrEntry.substring(0, 3);
-            String[] array = racerAbbrEntry.substring(4).split("_");
-            String racerName = array[0];
-            String racerTeam = array[1];
-            Racer racer = new Racer(racerAbbr, racerName, racerTeam);
-            racers.add(racer);
+    private Set<LapTime> readLapTimes(String startPathFile, String endPathFile, String racerCode) {
+        Set<LapTime> resultTime = new HashSet<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.S");
+        ClassLoader loader = getClass().getClassLoader();
+        URL resource = loader.getResource(startPathFile);
+
+        try (Stream<String> streamStartTime = Files
+                .lines(Paths.get(new File(resource.getFile()).getPath()))) {
+            streamStartTime.filter(l -> l.contains(racerCode)).forEach(l -> {
+                try {
+                    resultTime.add(new LapTime(LocalDateTime.parse(l.substring(3), formatter),
+                            findEndTime(startPathFile, endPathFile, racerCode)));
+                } catch (Exception ex) {
+
+                }
+            });
+        } catch (Exception ex) {
+
         }
+        return resultTime;
     }
 
-    private void parseStartResults(Set<String> startResults) {
-        for (Racer racer : racers) {
-            String abbrRacer = racer.getAbbr();
+    private LocalDateTime findEndTime(String startPathFile, String endPathFile, String racerCode) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.S");
+        ClassLoader loader = getClass().getClassLoader();
+        URL resource = loader.getResource(endPathFile);
 
-            for (String startTime : startResults) {
-                String abbrStart = startTime.substring(0, 3);
-                if (abbrStart.equals(abbrRacer)) {
-                    LocalDateTime startLDT = LocalDateTime.parse(startTime.substring(3).replace("_", "T"));
-                    racer.setStartTime(startLDT);
-                    break;
-                }
-            }
+        try (Stream<String> streamEndTime = Files.lines(Paths.get(new File(resource.getFile()).getPath()))) {
+            return LocalDateTime.parse(
+                    streamEndTime.filter(l -> l.contains(racerCode)).findFirst().orElse("").substring(3),
+                    formatter);
+        } catch (Exception ex) {
+
         }
-    }
-
-    private void parseEndResults(Set<String> endResults) {
-        for (Racer racer : racers) {
-            String abbrRacer = racer.getAbbr();
-
-            for (String endTime : endResults) {
-                String abbrEnd = endTime.substring(0, 3);
-                if (abbrEnd.equals(abbrRacer)) {
-                    LocalDateTime endLDT = LocalDateTime.parse(endTime.substring(3).replace("_", "T"));
-                    racer.setEndTime(endLDT);
-                    break;
-                }
-            }
-        }
+        return LocalDateTime.now();
     }
 }
