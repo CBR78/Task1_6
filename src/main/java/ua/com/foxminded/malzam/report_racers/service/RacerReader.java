@@ -3,6 +3,7 @@ package ua.com.foxminded.malzam.report_racers.service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,7 +51,8 @@ public class RacerReader {
             for (String startTime : startResults) {
                 String abbrStart = startTime.substring(0, 3);
                 if (abbrStart.equals(abbrRacer)) {
-                    racer.setStartTime(startTime);
+                    LocalDateTime startLDT = LocalDateTime.parse(startTime.substring(3).replace("_", "T"));
+                    racer.setStartTime(startLDT);
                     break;
                 }
             }
@@ -64,7 +66,8 @@ public class RacerReader {
             for (String endTime : endResults) {
                 String abbrEnd = endTime.substring(0, 3);
                 if (abbrEnd.equals(abbrRacer)) {
-                    racer.setEndTime(endTime);
+                    LocalDateTime endLDT = LocalDateTime.parse(endTime.substring(3).replace("_", "T"));
+                    racer.setEndTime(endLDT);
                     break;
                 }
             }

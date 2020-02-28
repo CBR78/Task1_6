@@ -5,18 +5,17 @@ import java.time.LocalDateTime;
 
 public class LapTime {
     private LocalDateTime start;
-    private Duration duration;
+    private LocalDateTime end;
 
-    public LapTime(String startTime) {
-        start = LocalDateTime.parse(startTime.substring(3).replace("_", "T"));
+    public void setStartTime(LocalDateTime startTime) {
+        start = startTime;
     }
 
-    public void setEndTime(String endTime) {
-        LocalDateTime end = LocalDateTime.parse(endTime.substring(3).replace("_", "T"));
-        duration = Duration.between(start, end);
+    public void setEndTime(LocalDateTime endTime) {
+        end = endTime;
     }
 
     public Duration getDuration() {
-        return duration;
+        return Duration.between(start, end);
     }
 }
