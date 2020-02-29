@@ -17,10 +17,8 @@ public class RacerReporter {
             String team = racer.getTeam();
             long timeLap = racer.getBestLap();
             long minute = timeLap / (60 * 1000);
-            long second = timeLap % (60 * 1000) / 1000;
-            long milli  = timeLap % 1000;
-            builder.append(String.format("%2d. %-17s | %-25s | %d:%02d.%tL",
-                                         place, name, team, minute, second, milli) + "\n");
+            builder.append(String.format("%2d. %-17s | %-25s | %d:%tS.%tL",
+                                         place, name, team, minute, timeLap, timeLap) + "\n");
             if (place == DELIMITER_STRING) {
                 builder.append(String.format("%n"));
             }
