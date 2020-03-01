@@ -1,10 +1,10 @@
-package ua.com.foxminded.malzam.report_racers.runner;
+package ua.com.foxminded.malzam.racers.runner;
 
 import java.util.Set;
 
-import ua.com.foxminded.malzam.report_racers.model.Racer;
-import ua.com.foxminded.malzam.report_racers.service.RacerReader;
-import ua.com.foxminded.malzam.report_racers.service.RacerReporter;
+import ua.com.foxminded.malzam.racers.model.Racer;
+import ua.com.foxminded.malzam.racers.service.RacerReader;
+import ua.com.foxminded.malzam.racers.service.RacerReporter;
 
 public class Runner {
 

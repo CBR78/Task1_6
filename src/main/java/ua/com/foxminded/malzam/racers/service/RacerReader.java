@@ -1,4 +1,4 @@
-package ua.com.foxminded.malzam.report_racers.service;
+package ua.com.foxminded.malzam.racers.service;
 
 import java.io.File;
 import java.net.URL;
@@ -12,14 +12,20 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
-import ua.com.foxminded.malzam.report_racers.model.LapTime;
-import ua.com.foxminded.malzam.report_racers.model.Racer;
+import ua.com.foxminded.malzam.racers.model.LapTime;
+import ua.com.foxminded.malzam.racers.model.Racer;
 
 public class RacerReader {
-
+    
+    private static final String DATE_FORMAT = "yyyy-MM-dd_HH:mm:ss.SSS";
+    private static final int RACER_CODE_LENGTH = 3;
+    private static final String SPLITTER_SYMBOL = "_";
+    
     public Set<Racer> recieveRacers(String pathAbbrFile, String pathStartFile, String pathEndFile) {
         
-        validate(pathAbbrFile, pathStartFile, pathEndFile);
+        validate(pathAbbrFile);
+        validate(pathStartFile);
+        validate(pathEndFile);
 
         Set<Racer> racers = new TreeSet<>(Comparator.comparing(Racer::getBestLap));
         ClassLoader loader = getClass().getClassLoader();
@@ -28,56 +34,33 @@ public class RacerReader {
         try (Stream<String> streamRacersAbbr
                 = Files.lines(Paths.get(new File(urlAbbrFile.getFile()).getPath()))) {
             streamRacersAbbr.forEach(line -> racers.add(new Racer(
-                    line.split("_")[1],
-                    line.split("_")[2], 
-                    readLapTimes(pathStartFile, pathEndFile, line.split("_")[0]))));
+                    line.split(SPLITTER_SYMBOL)[1],
+                    line.split(SPLITTER_SYMBOL)[2], 
+                    readLapTimes(pathStartFile, pathEndFile, line.split(SPLITTER_SYMBOL)[0]))));
         } catch (Exception ex) {
             System.out.println(ex);
         }
         return racers;
     }
     
-    private void validate(String pathAbbrFile, String pathStartFile, String pathEndFile) {
+    public void validate(String pathFile) {
         ClassLoader loader = getClass().getClassLoader();
-        
-        URL urlAbbrFile = loader.getResource(pathAbbrFile);
+        URL urlAbbrFile = loader.getResource(pathFile);
         if (urlAbbrFile == null) {
             throw new IllegalArgumentException(
-                    "File \"" + pathAbbrFile + "\" does not exist on the specified path");
-        }
-        
-        URL urlStartFile = loader.getResource(pathStartFile);
-        if (urlStartFile == null) {
-            throw new IllegalArgumentException(
-                    "File \"" + pathStartFile + "\" does not exist on the specified path");
-        }
-        
-        URL urlEndFile = loader.getResource(pathEndFile);
-        if (urlEndFile == null) {
-            throw new IllegalArgumentException(
-                    "File \"" + pathEndFile + "\" does not exist on the specified path");
+                    "File \"" + pathFile + "\" does not exist on the specified path");
         }
         
         File abbrFile = new File(urlAbbrFile.getFile());
         if (abbrFile.length() == 0) {
-            throw new IllegalArgumentException("File \"" + pathAbbrFile + "\" is empty");
-        }
-        
-        File startFile = new File(urlStartFile.getFile());
-        if (startFile.length() == 0) {
-            throw new IllegalArgumentException("File \"" + pathStartFile + "\" is empty");
-        }
-        
-        File endFile = new File(urlEndFile.getFile());
-        if (endFile.length() == 0) {
-            throw new IllegalArgumentException("File \"" + pathEndFile + "\" is empty");
+            throw new IllegalArgumentException("File \"" + pathFile + "\" is empty");
         }
     }
 
     private Set<LapTime> readLapTimes(String pathStartFile, String pathEndFile, String racerCode) {
         
         Set<LapTime> resultTime = new HashSet<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         ClassLoader loader = getClass().getClassLoader();
         URL urlStartFile = loader.getResource(pathStartFile);
 
@@ -85,7 +68,7 @@ public class RacerReader {
                 = Files.lines(Paths.get(new File(urlStartFile.getFile()).getPath()))) {
             streamStartTime.filter(l -> l.contains(racerCode)).forEach(l -> {
                 resultTime.add(new LapTime(LocalDateTime.parse(
-                        l.substring(3), formatter),
+                        l.substring(RACER_CODE_LENGTH), formatter),
                         findEndTime(pathEndFile, racerCode)));
             });
         } catch (Exception ex) {
@@ -95,7 +78,7 @@ public class RacerReader {
     }
 
     private LocalDateTime findEndTime(String pathEndFile, String racerCode) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         ClassLoader loader = getClass().getClassLoader();
         URL urlEndFile = loader.getResource(pathEndFile);
 
@@ -103,7 +86,7 @@ public class RacerReader {
                 = Files.lines(Paths.get(new File(urlEndFile.getFile()).getPath()))) {
             return LocalDateTime.parse(
                     streamEndTime.filter(l -> l.contains(racerCode)).findFirst().orElse("")
-                    .substring(3),formatter);
+                    .substring(RACER_CODE_LENGTH),formatter);
         } catch (Exception ex) {
             System.out.println(ex);
         }
