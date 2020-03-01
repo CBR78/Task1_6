@@ -10,13 +10,13 @@ import ua.com.foxminded.malzam.racers.service.formatter.RacerFormatter;
 
 public class RacerReporter {
     
-    private RacerFormatter racerFormat = new ConsoleRacerFormatter();
-    
     private static final int DELIMITER_STRING = 15;
+    private static final int SPLITTER_LENGTH = 59;
     private static final String SPLITTER = "-";
     private static final String EMPTY_LINE = "";
     private static final String NEW_LINE = "\n";
     private static final String PLACE_FORMATTER = "%2d.";
+    private RacerFormatter racerFormat = new ConsoleRacerFormatter();
     
     public String buildReport(Set<Racer> racers) {
         int place = 1;
@@ -25,7 +25,7 @@ public class RacerReporter {
         for (Racer racer : racers) {
             builder.append(String.format(PLACE_FORMATTER, place) + racerFormat.format(racer) + NEW_LINE);
             if (place == DELIMITER_STRING) {
-                builder.append(StringUtils.leftPad(EMPTY_LINE, 59, SPLITTER) + NEW_LINE);
+                builder.append(StringUtils.leftPad(EMPTY_LINE, SPLITTER_LENGTH, SPLITTER) + NEW_LINE);
             }
             place++;
         }

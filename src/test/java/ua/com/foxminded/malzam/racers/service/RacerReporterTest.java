@@ -9,16 +9,19 @@ import org.junit.jupiter.api.Test;
 import ua.com.foxminded.malzam.racers.model.Racer;
 
 class RacerReporterTest {
-
+    
+    private static final String ABBRFILE  = "abbreviations_test.txt";
+    private static final String STARTFILE = "start_test.log";
+    private static final String ENDFILE   = "end_test.log";
+    private static final String ABBRFILETWOLINE  = "abbreviations_test_two_line.txt";
+    private static final String STARTFILETWOLINE = "start_test_two_line.log";
+    private static final String ENDFILETWOLINE   = "end_test_two_line.log";
+    private RacerReader reader = new RacerReader();
+    private RacerReporter racerReporter = new RacerReporter();
+    
     @Test
     public void buildReport_Expect_TragetText_IfFiles_IsSampleFiles() {
-        RacerReader reader = new RacerReader();
-        Set<Racer> racers = reader.recieveRacers(
-                "abbreviations_test.txt",
-                "start_test.log",
-                "end_test.log");
-        RacerReporter racerReporter = new RacerReporter();
-        
+        Set<Racer> racers = reader.recieveRacers(ABBRFILE, STARTFILE, ENDFILE);
         String actual = racerReporter.buildReport(racers);
         String expected = 
                 " 1.Sebastian Vettel  | FERRARI                   | 1:04.415\n" + 
@@ -41,6 +44,17 @@ class RacerReporterTest {
                 "17.Marcus Ericsson   | SAUBER FERRARI            | 1:13.265\n" + 
                 "18.Lance Stroll      | WILLIAMS MERCEDES         | 1:13.323\n" + 
                 "19.Kevin Magnussen   | HAAS FERRARI              | 1:13.393\n" + 
+                "";                  
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void buildReport_Expect_TragetText_IfFiles_IsSampleFilesTwoLine() {
+        Set<Racer> racers = reader.recieveRacers(ABBRFILETWOLINE, STARTFILETWOLINE, ENDFILETWOLINE);
+        String actual = racerReporter.buildReport(racers);
+        String expected = 
+                " 1.Sebastian Vettel  | FERRARI                   | 1:04.415\n" + 
+                " 2.Daniel Ricciardo  | RED BULL RACING TAG HEUER | 1:12.013\n" + 
                 "";                  
         assertEquals(expected, actual);
     }

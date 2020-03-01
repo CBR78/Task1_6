@@ -16,28 +16,26 @@ import ua.com.foxminded.malzam.racers.model.Racer;
 
 class RacerReaderTest {
 
-    private final static String NOT_EXIST_FILE = "";
-    private final static String EMPTY_FILE = "empty_file.txt";
-    RacerReader reader = new RacerReader();
+    private static final String NOT_EXIST_FILE = "";
+    private static final String EMPTY_FILE = "empty_file.txt";
+    private static final String ABBRFILE  = "abbreviations_test_two_line.txt";
+    private static final String STARTFILE = "start_test_two_line.log";
+    private static final String ENDFILE   = "end_test_two_line.log";
+    private RacerReader reader = new RacerReader();
 
     @Test
     public void recieveRacers_Expect_IllegalArgumentException_ifAbbrFile_isNotExist() {
-        assertThrows(IllegalArgumentException.class,
-                () -> reader.validate(NOT_EXIST_FILE));
+        assertThrows(IllegalArgumentException.class, () -> reader.validate(NOT_EXIST_FILE));
     }
 
     @Test
     public void recieveRacers_Expect_IllegalArgumentException_ifAbbrFile_isEmptyFile() {
-        assertThrows(IllegalArgumentException.class,
-                () -> reader.validate(EMPTY_FILE));
+        assertThrows(IllegalArgumentException.class, () -> reader.validate(EMPTY_FILE));
     }
 
     @Test
     public void recieveRacers_Expect_TragetSet_IfFiles_IsSampleFiles() {
-        Set<Racer> actualRacers = reader.recieveRacers(
-                "abbreviations_test_two_line.txt",
-                "start_test_two_line.log",
-                "end_test_two_line.log");
+        Set<Racer> actualRacers = reader.recieveRacers(ABBRFILE, STARTFILE, ENDFILE);
         Set<Racer> expectedRacers = new TreeSet<>(Comparator.comparing(Racer::getBestLap));
         Set<LapTime> resultTimeSVF = new HashSet<>();
         resultTimeSVF.add(new LapTime(
@@ -49,7 +47,6 @@ class RacerReaderTest {
                 LocalDateTime.parse("2018-05-24T12:15:24.067")));
         expectedRacers.add(new Racer("Sebastian Vettel", "FERRARI", resultTimeSVF));
         expectedRacers.add(new Racer("Daniel Ricciardo", "RED BULL RACING TAG HEUER", resultTimeDRR));
-        
         assertEquals(expectedRacers, actualRacers);
     }
 }
