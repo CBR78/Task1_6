@@ -13,21 +13,34 @@ import ua.com.foxminded.malzam.racers.model.Racer;
 
 class ConsoleRacerFormatterTest {
     
-    private static final String STARTTIME = "2018-05-24T12:02:58.917";
-    private static final String ENDTIME = "2018-05-24T12:04:03.332";
-    private static final String NAMERACER = "Sebastian Vettel";
-    private static final String TEAMRACER = "FERRARI";
+    private static final String START_TIME = "2018-05-24T12:02:58.917";
+    private static final String END_TIME   = "2018-05-24T12:04:03.332";
+    private static final String NAME_RACER = "Sebastian Vettel";
+    private static final String TEAM_RACER = "FERRARI";
+    private static final String NAME_RACER_IS_EMPTY = "";
     private RacerFormatter racerFormat = new ConsoleRacerFormatter();
     
     @Test
-    public void format_Expect_TragetString_IfRacer_IsSample() {
+    public void format_Expect_TargetString_IfRacer_IsSample() {
         Set<LapTime> resultTimeSVF = new HashSet<>();
         resultTimeSVF.add(new LapTime(
-                LocalDateTime.parse(STARTTIME),
-                LocalDateTime.parse(ENDTIME)));
-        Racer racer = new Racer(NAMERACER, TEAMRACER, resultTimeSVF);
+                LocalDateTime.parse(START_TIME),
+                LocalDateTime.parse(END_TIME)));
+        Racer racer = new Racer(NAME_RACER, TEAM_RACER, resultTimeSVF);
         String actual = racerFormat.format(racer);
         String expected = "Sebastian Vettel  | FERRARI                   | 1:04.415";
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void format_Expect_TargetString_IfNameRacer_IsEmpty() {
+        Set<LapTime> resultTimeSVF = new HashSet<>();
+        resultTimeSVF.add(new LapTime(
+                LocalDateTime.parse(START_TIME),
+                LocalDateTime.parse(END_TIME)));
+        Racer racer = new Racer(NAME_RACER_IS_EMPTY, TEAM_RACER, resultTimeSVF);
+        String actual = racerFormat.format(racer);
+        String expected = "                  | FERRARI                   | 1:04.415";
         assertEquals(expected, actual);
     }
 }

@@ -46,11 +46,15 @@ public class RacerReader {
     public void validate(String pathFile) {
         ClassLoader loader = getClass().getClassLoader();
         URL urlAbbrFile = loader.getResource(pathFile);
-        File abbrFile = new File(urlAbbrFile.getFile());
-        
-        if (urlAbbrFile == null || abbrFile.length() == 0) {
+        if (urlAbbrFile == null) {
             throw new IllegalArgumentException(
-                    "File \"" + pathFile + "\" does not exist on the specified path or is empty");
+                    "File \"" + pathFile + "\" does not exist on the specified path");
+        }
+        
+        File abbrFile = new File(urlAbbrFile.getFile());
+        if (abbrFile.length() == 0) {
+            throw new IllegalArgumentException(
+                    "File \"" + pathFile + "\" is empty");
         }
     }
 

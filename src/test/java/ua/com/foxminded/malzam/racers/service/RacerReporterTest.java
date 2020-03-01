@@ -10,18 +10,18 @@ import ua.com.foxminded.malzam.racers.model.Racer;
 
 class RacerReporterTest {
     
-    private static final String ABBRFILE  = "abbreviations_test.txt";
-    private static final String STARTFILE = "start_test.log";
-    private static final String ENDFILE   = "end_test.log";
-    private static final String ABBRFILETWOLINE  = "abbreviations_test_two_line.txt";
-    private static final String STARTFILETWOLINE = "start_test_two_line.log";
-    private static final String ENDFILETWOLINE   = "end_test_two_line.log";
+    private static final String ABBR_FILE  = "abbreviations_test.txt";
+    private static final String START_FILE = "start_test.log";
+    private static final String END_FILE   = "end_test.log";
+    private static final String ABBR_FILE_TWO_LINE  = "abbreviations_test_two_line.txt";
+    private static final String START_FILE_TWO_LINE = "start_test_two_line.log";
+    private static final String END_FILE_TWO_LINE   = "end_test_two_line.log";
     private RacerReader reader = new RacerReader();
     private RacerReporter racerReporter = new RacerReporter();
     
     @Test
-    public void buildReport_Expect_TragetText_IfFiles_IsSampleFiles() {
-        Set<Racer> racers = reader.recieveRacers(ABBRFILE, STARTFILE, ENDFILE);
+    public void buildReport_Expect_TargetText_IfFiles_IsSampleFiles() {
+        Set<Racer> racers = reader.recieveRacers(ABBR_FILE, START_FILE, END_FILE);
         String actual = racerReporter.buildReport(racers);
         String expected = 
                 " 1.Sebastian Vettel  | FERRARI                   | 1:04.415\n" + 
@@ -49,8 +49,11 @@ class RacerReporterTest {
     }
     
     @Test
-    public void buildReport_Expect_TragetText_IfFiles_IsSampleFilesTwoLine() {
-        Set<Racer> racers = reader.recieveRacers(ABBRFILETWOLINE, STARTFILETWOLINE, ENDFILETWOLINE);
+    public void buildReport_Expect_TargetText_IfFiles_IsSampleFilesTwoLine() {
+        Set<Racer> racers = reader.recieveRacers(
+                ABBR_FILE_TWO_LINE, 
+                START_FILE_TWO_LINE, 
+                END_FILE_TWO_LINE);
         String actual = racerReporter.buildReport(racers);
         String expected = 
                 " 1.Sebastian Vettel  | FERRARI                   | 1:04.415\n" + 

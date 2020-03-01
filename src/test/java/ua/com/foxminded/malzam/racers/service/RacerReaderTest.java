@@ -16,11 +16,11 @@ import ua.com.foxminded.malzam.racers.model.Racer;
 
 class RacerReaderTest {
 
-    private static final String NOT_EXIST_FILE = "";
+    private static final String NOT_EXIST_FILE = "NOT_EXIST_FILE";
     private static final String EMPTY_FILE = "empty_file.txt";
-    private static final String ABBRFILE  = "abbreviations_test_two_line.txt";
-    private static final String STARTFILE = "start_test_two_line.log";
-    private static final String ENDFILE   = "end_test_two_line.log";
+    private static final String ABBR_FILE  = "abbreviations_test_two_line.txt";
+    private static final String START_FILE = "start_test_two_line.log";
+    private static final String END_FILE   = "end_test_two_line.log";
     private RacerReader reader = new RacerReader();
 
     @Test
@@ -34,8 +34,8 @@ class RacerReaderTest {
     }
 
     @Test
-    public void recieveRacers_Expect_TragetSet_IfFiles_IsSampleFiles() {
-        Set<Racer> actualRacers = reader.recieveRacers(ABBRFILE, STARTFILE, ENDFILE);
+    public void recieveRacers_Expect_TargetSet_IfFiles_IsSampleFiles() {
+        Set<Racer> actualRacers = reader.recieveRacers(ABBR_FILE, START_FILE, END_FILE);
         Set<Racer> expectedRacers = new TreeSet<>(Comparator.comparing(Racer::getBestLap));
         Set<LapTime> resultTimeSVF = new HashSet<>();
         resultTimeSVF.add(new LapTime(
