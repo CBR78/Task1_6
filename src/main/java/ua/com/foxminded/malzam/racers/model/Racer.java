@@ -24,8 +24,12 @@ public class Racer {
     }
 
     public long getBestLap() {
-        return lapTimeSet.stream().sorted(Comparator.comparing(LapTime::getDuration))
-                .map(LapTime::getDuration).findFirst().orElse(0L);
+        return lapTimeSet
+                .stream()
+                .sorted(Comparator.comparing(LapTime::getDuration))
+                .map(LapTime::getDuration)
+                .findFirst()
+                .orElse(0L);
     }
 
     @Override
